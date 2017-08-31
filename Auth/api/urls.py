@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-from .views import return_token
+from .views import return_token,LogOut,login,LogIn
 
 urlpatterns = [
     url(r'^oauth/', include('social_django.urls', namespace='social')),
-    url(r'^return-token$',return_token,name="home"),
+    url(r'^return-token$',return_token,name="return-token"),
+    url(r'^logout$',LogOut.as_view(),name="logout"),
+    url(r'^login$',LogIn.as_view(),name="login"),
+    
 ]
