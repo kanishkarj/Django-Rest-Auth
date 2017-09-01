@@ -16,7 +16,9 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 from rest_framework.authtoken.models import Token
 from rest_framework.generics import GenericAPIView
-
+from .authAddons import sendActivationMail
+from .models import User
+import time
 
 class LogOut(View):
     authentication_classes = (TokenAuthentication, BasicAuthentication)
@@ -47,3 +49,31 @@ def return_token(request):
     token, _ = Token.objects.get_or_create(user=request.user)
     #return Response({"token": token.key})
     return JsonResponse(token.key, safe=False)
+
+class Registration(GenericAPIView):
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    permission_classes = (AllowAny,)
+    
+    def post(self, request, *args, **kwargs):
+        
+        try :
+            user = User.objects.create_user(
+                                    username= request.POST.get('first_name') + str(time.time()),
+                                    email=request.POST.get('email'),
+                                    password=request.POST.get('password'),
+                                    first_name = request.POST.get('first_name'),
+                                    last_name = request.POST.get('last_name'),
+                                    phone = request.POST.get('phone'),
+                                    is_active=False
+                                    )
+            #sendActivationMail(user)
+        except Exception as e:
+            return JsonResponse(str(e), safe=False)
+        return JsonResponse(user.username, safe=False)        
+
+from django.core.mail import EmailMessage
+
+def home(request):
+    pass
+    
+    

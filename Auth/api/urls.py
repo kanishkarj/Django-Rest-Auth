@@ -15,12 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-from .views import return_token,LogOut,login,LogIn
+from .views import return_token,LogOut,LogIn,Registration,home
+from .authAddons import activate
 
 urlpatterns = [
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^return-token$',return_token,name="return-token"),
     url(r'^logout$',LogOut.as_view(),name="logout"),
     url(r'^login$',LogIn.as_view(),name="login"),
-    
+    url(r'^home$',home,name="home"),
+    url(r'^register$',Registration.as_view(),name="registration"),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        activate, name='activate'),
 ]
