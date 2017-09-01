@@ -66,14 +66,25 @@ class Registration(GenericAPIView):
                                     phone = request.POST.get('phone'),
                                     is_active=False
                                     )
-            #sendActivationMail(user)
+            sendActivationMail(user)
         except Exception as e:
             return JsonResponse(str(e), safe=False)
         return JsonResponse(user.username, safe=False)        
 
-from django.core.mail import EmailMessage
+class UpdateProfile(GenericAPIView) :
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+    
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        if 'first_name' in request.POST:
+            user.first_name = request.POST.get('first_name')
+        if 'last_name' in request.POST:
+            user.last_name = request.POST.get('last_name')
+        user.save()
+        
+        return JsonResponse(user.username, safe=False)
 
 def home(request):
     pass
-    
     
