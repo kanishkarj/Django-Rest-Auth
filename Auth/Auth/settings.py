@@ -77,6 +77,8 @@ ROOT_URLCONF = 'Auth.urls'
 
 AUTH_USER_MODEL = 'api.User'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -161,11 +163,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env.str('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env.str('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET') 
 
 
-EMAIL_USE_TLS = False
-EMAIL_HOST = 'smtp.mailtrap.io'
-EMAIL_HOST_USER = '161f37698a066b'
-EMAIL_HOST_PASSWORD = '135ee8d7369f41'
-EMAIL_PORT = '2525'
+EMAIL_USE_TLS = True
+EMAIL_HOST = env.str('EMAIL_HOST')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = env.int('EMAIL_PORT')
 
 
 LOGIN_URL = 'login'

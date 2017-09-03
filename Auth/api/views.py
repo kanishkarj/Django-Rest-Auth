@@ -86,5 +86,18 @@ class UpdateProfile(GenericAPIView) :
         return JsonResponse(user.username, safe=False)
 
 def home(request):
-    pass
+   pass
+
+class ChangePassword(GenericAPIView) :
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
     
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        if 'first_name' in request.POST:
+            user.first_name = request.POST.get('first_name')
+        if 'last_name' in request.POST:
+            user.last_name = request.POST.get('last_name')
+        user.save()
+        
+        return JsonResponse(user.username, safe=False)
