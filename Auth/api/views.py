@@ -16,7 +16,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 from rest_framework.authtoken.models import Token
 from rest_framework.generics import GenericAPIView
-from .authAddons import sendActivationMail
+from .authAddons import sendActivationMail,sendPaswordResetMail
 from .models import User
 import time
 
@@ -92,12 +92,5 @@ class ChangePassword(GenericAPIView) :
     authentication_classes = (TokenAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
     
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        if 'first_name' in request.POST:
-            user.first_name = request.POST.get('first_name')
-        if 'last_name' in request.POST:
-            user.last_name = request.POST.get('last_name')
-        user.save()
-        
-        return JsonResponse(user.username, safe=False)
+    def get(self, request, *args, **kwargs):
+        sendPaswordResetMail(request.user)
